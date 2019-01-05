@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 //user defined header files
 #include "cli.h"
 #include "app.h"
@@ -28,7 +29,7 @@
 /******************************************************************************
  *                           Private Functions
  ******************************************************************************/
-static void RxHandler (char *pcData, uint8_t ucBytesReceived);
+static uint8_t RxHandler (char *pcData, uint8_t ucBytesReceived);
 static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *Tokens[]);
 static uint8_t Help (uint8_t **argv, uint8_t argc);
 
@@ -51,7 +52,6 @@ static const CommandList_t CommandList[] =
 };
 
 static char m_pcCommand[COMMAND_SIZE_IN_BYTES];
-static uint8_t m_pcCommandReceived              = 0;
 static uint8_t m_ucIndex                        = 0;
 
 
@@ -76,12 +76,13 @@ void CliInit(void)
 void CliProcessCommand(char *pcData, uint8_t ucBytesReceived)
 {
 	char * Parameters[8];
-	uint8_t ucParameterCount = 0;
-	uint8_t ucCount          = 0;
+	uint8_t ucCommandReceived = 0;
+	uint8_t ucParameterCount  = 0;
+	uint8_t ucCount           = 0;
 
-	RxHandler(pcData, ucBytesReceived);
+	ucCommandReceived = RxHandler(pcData, ucBytesReceived);
 
-	if ((1 == m_pcCommandReceived) && (strlen((const char *)m_pcCommand) > 0))
+	if ((true == ucCommandReceived) && (strlen((const char *)m_pcCommand) > 0))
 	{
 		ucParameterCount = GetParameters((char *)m_pcCommand, strlen((const char *)m_pcCommand), ' ', Parameters);
 
@@ -108,10 +109,10 @@ void CliProcessCommand(char *pcData, uint8_t ucBytesReceived)
 		}
 	}
 
-	if (1 == m_pcCommandReceived)
+	if (true == ucCommandReceived)
 	{
-		m_pcCommandReceived = 0;
-		m_ucIndex           = 0;
+		ucCommandReceived = 0;
+		m_ucIndex          = 0;
 
 		memset(m_pcCommand, 0, sizeof(m_pcCommand));
 		printf(CLI_DEF_TEXT);
@@ -132,7 +133,7 @@ void CliProcessCommand(char *pcData, uint8_t ucBytesReceived)
 static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, char *Parameter[])
 {
 	uint8_t ucParameterCount = 0;
-	uint8_t ucSpace = 0;
+	uint8_t ucSpace          = false;
 
 	Parameter[ucParameterCount++] = pcData;
 
@@ -140,17 +141,17 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
 	{
 		if (*(pcData + ucCount) == cDelimiter)
 		{
-			if (1 != ucSpace)
+			if (true != ucSpace)
 			{
 				*(pcData + ucCount) = '\0';
 				Parameter[ucParameterCount] = &pcData[ucCount + 1];
 				ucParameterCount++;
-				ucSpace = 1;
+				ucSpace = true;
 			}
 		}
 		else
 		{
-			ucSpace = 0;
+			ucSpace = false;
 		}
 	}
 
@@ -165,10 +166,13 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
 /** @brief Handles Received characters from Cli
  *  @param[in] pcData  Pointer to Received characters
  *  @param[in] argc    Number of character received
- *  @return    None
+ *  @return    uint8_t true - Command received, false - command not received yet
+ *
  */
-static void RxHandler(char *pcData, uint8_t ucBytesReceived)
+static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
 {
+	uint8_t ucReturn = false;
+
 	for (uint8_t ucCount = 0; ucCount < ucBytesReceived; ucCount++)
 	{
 		//Convert string to lowercase
@@ -181,8 +185,8 @@ static void RxHandler(char *pcData, uint8_t ucBytesReceived)
 
 		if ('\r' == m_pcCommand[m_ucIndex])
 		{
-			m_pcCommandReceived = 1;
 			m_pcCommand[m_ucIndex] = '\0';
+			ucReturn = true;
 		}
 		if ('\b' == m_pcCommand[m_ucIndex])
 		{
@@ -197,6 +201,8 @@ static void RxHandler(char *pcData, uint8_t ucBytesReceived)
 		}
 		m_pcCommand[m_ucIndex] = '\0';
 	}
+
+	return ucReturn;
 }//RxHandler
 
 /** @brief Display available commands
