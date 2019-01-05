@@ -132,6 +132,7 @@ void CliProcessCommand(char *pcData, uint8_t ucBytesReceived)
 static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, char *Parameter[])
 {
 	uint8_t ucParameterCount = 0;
+	uint8_t ucSpace = 0;
 
 	Parameter[ucParameterCount++] = pcData;
 
@@ -139,10 +140,23 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
 	{
 		if (*(pcData + ucCount) == cDelimiter)
 		{
-			*(pcData + ucCount) = '\0';
-			Parameter[ucParameterCount] = &pcData[ucCount + 1];
-			ucParameterCount++;
+			if (1 != ucSpace)
+			{
+				*(pcData + ucCount) = '\0';
+				Parameter[ucParameterCount] = &pcData[ucCount + 1];
+				ucParameterCount++;
+				ucSpace = 1;
+			}
 		}
+		else
+		{
+			ucSpace = 0;
+		}
+	}
+
+	if (1 == ucSpace)
+	{
+		ucParameterCount--;
 	}
 
 	return ucParameterCount;
