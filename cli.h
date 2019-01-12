@@ -28,6 +28,7 @@ typedef struct
     char * pcName;
     CliExecCommand CliExecuteCommand;
     char * pcDescription;
+    uint8_t ucExpectedNumOfParameters;
 }CommandList_t;
 
 

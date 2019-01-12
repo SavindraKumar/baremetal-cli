@@ -93,7 +93,7 @@ uint8_t AppSum(uint8_t **argv, uint8_t argc, char *pcResult)
 	iSum = (iNum1 + iNum2);
 
 	usLength += sprintf(pcResult + usLength, "\r\n");
-	usLength += sprintf(pcResult + usLength, "Sum =%d\n", iSum);
+	usLength += sprintf(pcResult + usLength, "Sum = %d", iSum);
 	usLength += sprintf(pcResult + usLength, "\r\n");
 
 	return true;
