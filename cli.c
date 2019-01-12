@@ -5,7 +5,7 @@
 /** @file cli.c
  *  @brief cli interface
  *
- *  @author Savm_ucIndexra Kumar(savm_ucIndexran1989@gmail.com)
+ *  @author Savindra Kumar(savindran1989@gmail.com)
  *  @bug No known bugs.
  */
 /*****************************************************************************/
@@ -31,7 +31,7 @@
  ******************************************************************************/
 static uint8_t RxHandler (char *pcData, uint8_t ucBytesReceived);
 static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *Tokens[]);
-static uint8_t Help (uint8_t **argv, uint8_t argc);
+static uint8_t Help (uint8_t **argv, uint8_t argc, char *pcResult);
 
 
 /******************************************************************************
@@ -60,25 +60,29 @@ static uint8_t m_ucIndex                        = 0;
  ******************************************************************************/
 
 /** @brief Initialise Cli
- *  @param[in] None
+ *  @param[in]  None
+ *  @param[out] pcResult   Pointer to result buffer
  *  @return    None
  */
-void CliInit(void)
+void CliInit(char *pcResult)
 {
-	printf(CLI_DEF_TEXT);
+	sprintf(pcResult, CLI_DEF_TEXT);
 }//end CliInit
 
 /** @brief Process characters received from Cli
- *  @param[in] pcData          Pointer to characters received
- *  @param[in] ucBytesReceived Number of characters received
- *  @return    None
+ *  @param[in]  pcData          Pointer to characters received
+ *  @param[in]  ucBytesReceived Number of characters received
+ *  @param[out] pcResult        Pointer to result buffer
+ *  @return     uint8_t         true-Command executed successfully,
+ *                              false-Command not executed
  */
-void CliProcessCommand(char *pcData, uint8_t ucBytesReceived)
+uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 {
 	char * Parameters[8];
-	uint8_t ucCommandReceived = 0;
+	uint8_t ucCommandReceived = false;
 	uint8_t ucParameterCount  = 0;
 	uint8_t ucCount           = 0;
+	uint8_t ucReturn          = false;
 
 	ucCommandReceived = RxHandler(pcData, ucBytesReceived);
 
@@ -91,34 +95,40 @@ void CliProcessCommand(char *pcData, uint8_t ucBytesReceived)
 			for (ucCount = 0; ucCount < sizeof (CommandList) / sizeof (CommandList[0]); ucCount++)
 			{
 				if (!strcmp(Parameters[0], CommandList[ucCount].pcName))
-
 				{
-					CommandList[ucCount].CliExecuteCommand((uint8_t **)Parameters, ucParameterCount);
+					ucReturn = CommandList[ucCount].CliExecuteCommand((uint8_t **)&Parameters[1], ucParameterCount, pcResult);
 					break;
 				}
 			}
 			if (ucCount == sizeof (CommandList) / sizeof (CommandList[0]))
 			{
-				printf("\nCommand not found\r\n");
+				strcpy(pcResult, "\nCommand not found\r\n");
+				ucReturn = true;
 			}
 
 		}
 		else
 		{
-			printf("\nCommand not found\r\n");
+			strcpy(pcResult, "\nCommand not found\r\n");
+			ucReturn = true;
 		}
 	}
 
-	if (true == ucCommandReceived)
-	{
-		ucCommandReceived = 0;
-		m_ucIndex          = 0;
-
-		memset(m_pcCommand, 0, sizeof(m_pcCommand));
-		printf(CLI_DEF_TEXT);
-	}
-
+	return ucReturn;
 }//end CliProcessCommand
+
+/** @brief Clear Cli buffer
+ *  @param[in]  None
+ *  @param[out] pcResult Pointer to command text
+ *  @return     None
+ *
+ */
+void CliResetBuffer(char *pcResult)
+{
+	m_ucIndex          = 0;
+	memset(m_pcCommand, 0, sizeof(m_pcCommand));
+	sprintf(pcResult, CLI_DEF_TEXT);
+}//end CliResetBuffer
 
 /******************************************************************************
  *                           L O C A L  F U N C T I O N S
@@ -208,18 +218,22 @@ static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
 /** @brief Display available commands
  *  @param[in] argv    Pointer to parameters string
  *  @param[in] argc    Number of Parameters
- *  @return    uint8_t
+ *  @param[out] pcResult Pointer to result buffer
+ *  @return     uint8_t  true-Command executed successfully,
+ *                       false-Command not executed
  */
-static uint8_t Help(uint8_t **argv, uint8_t argc)
+static uint8_t Help(uint8_t **argv, uint8_t argc, char *pcResult)
 {
-	printf("\r\n");
+	uint16_t usLength = 0;
+
+	usLength += sprintf(pcResult + usLength, "\r\n");
 
 	for (uint8_t ucCount = 0; ucCount < sizeof (CommandList) / sizeof (CommandList[0]); ucCount++)
 	{
-		printf("\t%-15s"" - %s\r\n", CommandList[ucCount].pcName, CommandList[ucCount].pcDescription);
+		usLength += sprintf(pcResult + usLength, "\t%-15s"" - %s\r\n", CommandList[ucCount].pcName, CommandList[ucCount].pcDescription);
 	}
 
-	return 0;
+	return true;
 }//end Help
 
 /******************************************************************************

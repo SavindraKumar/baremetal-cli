@@ -28,9 +28,9 @@
 /******************************************************************************
  *                           Global Functions
 ******************************************************************************/
-uint8_t AppShowInfo(uint8_t **argv, uint8_t argc);
-uint8_t AppExit(uint8_t **argv, uint8_t argc);
-uint8_t AppSum( uint8_t **argv, uint8_t argc);
+uint8_t AppShowInfo(uint8_t **argv, uint8_t argc, char *pcResult);
+uint8_t AppExit(uint8_t **argv, uint8_t argc, char *pcResult);
+uint8_t AppSum( uint8_t **argv, uint8_t argc, char *pcResult);
 
 
 #endif /* _APP_H */

@@ -21,7 +21,7 @@
 ******************************************************************************/
 #define CLI_DEF_TEXT    "\r\nCli-> "
 
-typedef uint8_t (*CliExecCommand)(uint8_t **argv, uint8_t argc);
+typedef uint8_t (*CliExecCommand)(uint8_t **argv, uint8_t argc, char *pcResult);
 
 typedef struct
 {
@@ -34,8 +34,9 @@ typedef struct
 /******************************************************************************
  *                           Global variables
 ******************************************************************************/
-void CliInit (void);
-void CliProcessCommand (char *pcData, uint8_t ucBytesReceived);
+void CliInit (char *pcResult);
+uint8_t CliProcessCommand (char *pcData, uint8_t ucBytesReceived, char *pcResult);
+void CliResetBuffer (char *pcResult);
 
 /******************************************************************************
  *                           Global Functions
