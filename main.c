@@ -56,7 +56,7 @@ int main(void)
 
 	for(;;)
 	{
-		uint8_t ucReturn        = false;
+		bool bReturn            = false;
 		uint8_t ucBytesReceived = 0;
 
 		pcRxBuffer[0] = getchar();
@@ -64,9 +64,9 @@ int main(void)
 
 		if (0!= ucBytesReceived)
 		{
-			ucReturn = CliProcessCommand(pcRxBuffer, ucBytesReceived, pcResult);
+			bReturn = CliProcessCommand(pcRxBuffer, ucBytesReceived, pcResult);
 
-			if (true == ucReturn)
+			if (true == bReturn)
 			{
 				printf(pcResult);
 				CliResetBuffer(pcResult);

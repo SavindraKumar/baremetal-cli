@@ -78,14 +78,14 @@ void CliInit(char *pcResult)
 uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 {
 	char * Parameters[8];
-	uint8_t ucCommandReceived = false;
+	bool bCommandReceived     = false;
 	uint8_t ucParameterCount  = 0;
 	uint8_t ucCount           = 0;
-	uint8_t ucReturn          = false;
+	bool bReturn              = false;
 
-	ucCommandReceived = RxHandler(pcData, ucBytesReceived);
+	bCommandReceived = RxHandler(pcData, ucBytesReceived);
 
-	if ((true == ucCommandReceived) && (strlen((const char *)m_pcCommand) > 0))
+	if ((true == bCommandReceived) && (strlen((const char *)m_pcCommand) > 0))
 	{
 		ucParameterCount = GetParameters((char *)m_pcCommand, strlen((const char *)m_pcCommand), ' ', Parameters);
 
@@ -99,12 +99,12 @@ uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 
 				if( ucParametersInCommmand == CommandList[ucCount].ucExpectedNumOfParameters)
 				{
-					ucReturn = CommandList[ucCount].CliExecuteCommand(&Parameters[PARAMETER_START_OFFSET], ucParametersInCommmand, pcResult);
+					bReturn = CommandList[ucCount].CliExecuteCommand(&Parameters[PARAMETER_START_OFFSET], ucParametersInCommmand, pcResult);
 				}
 				else
 				{
 					strcpy(pcResult, "\nIncorrect Parameters\r\n");
-					ucReturn =true;
+					bReturn =true;
 				}
 				break;
 			}//end if
@@ -113,11 +113,11 @@ uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 		if (ucCount == sizeof (CommandList) / sizeof (CommandList[0]))
 		{
 			strcpy(pcResult, "\nCommand not found\r\n");
-			ucReturn = true;
+			bReturn = true;
 		}//end if
 	}//end if
 
-	return ucReturn;
+	return bReturn;
 }//end CliProcessCommand
 
 /** @brief Clear Cli buffer
@@ -184,7 +184,7 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
  */
 static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
 {
-	uint8_t ucReturn = false;
+	bool bReturn = false;
 
 	for (uint8_t ucCount = 0; ucCount < ucBytesReceived; ucCount++)
 	{
@@ -199,7 +199,7 @@ static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
 		if ('\r' == m_pcCommand[m_ucIndex])
 		{
 			m_pcCommand[m_ucIndex] = '\0';
-			ucReturn = true;
+			bReturn = true;
 		}
 		if ('\b' == m_pcCommand[m_ucIndex])
 		{
@@ -215,7 +215,7 @@ static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
 		m_pcCommand[m_ucIndex] = '\0';
 	}
 
-	return ucReturn;
+	return bReturn;
 }//RxHandler
 
 /** @brief Display available commands
