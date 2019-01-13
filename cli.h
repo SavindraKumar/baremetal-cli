@@ -21,7 +21,7 @@
 ******************************************************************************/
 #define CLI_DEF_TEXT    "\r\nCli-> "
 
-typedef uint8_t (*CliExecCommand)(uint8_t **argv, uint8_t argc, char *pcResult);
+typedef uint8_t (*CliExecCommand)(char **argv, uint8_t argc, char *pcResult);
 
 typedef struct
 {

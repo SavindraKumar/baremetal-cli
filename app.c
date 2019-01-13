@@ -46,7 +46,7 @@
  *  @return     uint8_t  true-Command executed successfully,
  *                       false-Command not executed
  */
-uint8_t AppShowInfo(uint8_t **argv, uint8_t argc, char *pcResult)
+uint8_t AppShowInfo(char **argv, uint8_t argc, char *pcResult)
 {
 	uint16_t usLength = 0;
 
@@ -67,7 +67,7 @@ uint8_t AppShowInfo(uint8_t **argv, uint8_t argc, char *pcResult)
  *  @return     uint8_t  true-Command executed successfully,
  *                       false-Command not executed
  */
-uint8_t AppExit(uint8_t **argv, uint8_t argc, char *pcResult)
+uint8_t AppExit(char **argv, uint8_t argc, char *pcResult)
 {
 	exit(0);
 	return true;
@@ -80,7 +80,7 @@ uint8_t AppExit(uint8_t **argv, uint8_t argc, char *pcResult)
  *  @return     uint8_t  true-Command executed successfully,
  *                       false-Command not executed
  */
-uint8_t AppSum(uint8_t **argv, uint8_t argc, char *pcResult)
+uint8_t AppSum(char **argv, uint8_t argc, char *pcResult)
 {
 	uint16_t usLength = 0;
 	int32_t iNum1     = 0;

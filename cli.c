@@ -33,7 +33,7 @@
  ******************************************************************************/
 static uint8_t RxHandler (char *pcData, uint8_t ucBytesReceived);
 static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *Tokens[]);
-static uint8_t Help (uint8_t **argv, uint8_t argc, char *pcResult);
+static uint8_t Help (char **argv, uint8_t argc, char *pcResult);
 
 /******************************************************************************
  *                           external variables
@@ -99,7 +99,7 @@ uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 
 				if( ucParametersInCommmand == CommandList[ucCount].ucExpectedNumOfParameters)
 				{
-					ucReturn = CommandList[ucCount].CliExecuteCommand((uint8_t **)&Parameters[PARAMETER_START_OFFSET], ucParametersInCommmand, pcResult);
+					ucReturn = CommandList[ucCount].CliExecuteCommand(&Parameters[PARAMETER_START_OFFSET], ucParametersInCommmand, pcResult);
 				}
 				else
 				{
@@ -225,7 +225,7 @@ static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
  *  @return     uint8_t  true-Command executed successfully,
  *                       false-Command not executed
  */
-static uint8_t Help(uint8_t **argv, uint8_t argc, char *pcResult)
+static uint8_t Help(char **argv, uint8_t argc, char *pcResult)
 {
 	uint16_t usLength = 0;
 
