@@ -1,10 +1,10 @@
-/** \addtogroup Cli
+/** @addtogroup Cli
+ *  @brief Cli Interface
  *  @{
  */
 /*****************************************************************************/
 /** @file cli.c
- *  @brief cli interface
- *
+ *  @brief Cli interface
  *  @author Savindra Kumar(savindran1989@gmail.com)
  *  @bug No known bugs.
  */
@@ -32,8 +32,8 @@
  *                           Private Functions
  ******************************************************************************/
 static uint8_t RxHandler (char *pcData, uint8_t ucBytesReceived);
-static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *Tokens[]);
-static uint8_t Help (char **argv, uint8_t argc, char *pcResult);
+static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *ppcTokens[]);
+static uint8_t Help (char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
 
 /******************************************************************************
  *                           external variables
@@ -42,12 +42,12 @@ static uint8_t Help (char **argv, uint8_t argc, char *pcResult);
 /******************************************************************************
  *                           Private variables
  ******************************************************************************/
-static const CommandList_t CommandList[] =
+static const CliCommandList_t m_pCliCommandList[] =
 {
-		{"help", Help, "Displays list of supported commands", 0},
-		{"info", AppShowInfo, "Shows device info", 0},
-		{"exit", AppExit, "Exit from program", 0},
-		{"sum", AppSum, "Sum of two numbers", 2},
+	{"help", Help, "Displays list of supported commands", 0},
+	{"info", AppShowInfo, "Shows device info", 0},
+	{"exit", AppExit, "Exit from program", 0},
+	{"sum", AppSum, "Sum of two numbers", 2},
 };
 
 static char m_pcCommand[COMMAND_SIZE_IN_BYTES];
@@ -77,29 +77,30 @@ void CliInit(char *pcResult)
  */
 uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 {
-	char * Parameters[8];
+	char *ppcParameters[8];
 	bool bCommandReceived     = false;
+	bool bReturn              = false;
 	uint8_t ucParameterCount  = 0;
 	uint8_t ucCount           = 0;
-	bool bReturn              = false;
+
 
 	bCommandReceived = RxHandler(pcData, ucBytesReceived);
 
 	if ((true == bCommandReceived) && (strlen((const char *)m_pcCommand) > 0))
 	{
-		ucParameterCount = GetParameters((char *)m_pcCommand, strlen((const char *)m_pcCommand), ' ', Parameters);
+		ucParameterCount = GetParameters(m_pcCommand, strlen((const char *)m_pcCommand), ' ', ppcParameters);
 
-		for (ucCount = 0; ucCount < sizeof (CommandList) / sizeof (CommandList[0]); ucCount++)
+		for (ucCount = 0; ucCount < sizeof (m_pCliCommandList) / sizeof (m_pCliCommandList[0]); ucCount++)
 		{
-			if (!strcmp(Parameters[COMMAND_START_OFFSET], CommandList[ucCount].pcName))
+			if (!strcmp(ppcParameters[COMMAND_START_OFFSET], m_pCliCommandList[ucCount].pcName))
 			{
 				uint8_t ucParametersInCommmand = 0;
 
 				ucParametersInCommmand = (ucParameterCount - 1);
 
-				if( ucParametersInCommmand == CommandList[ucCount].ucExpectedNumOfParameters)
+				if( ucParametersInCommmand == m_pCliCommandList[ucCount].ucExpectedNumOfParameters)
 				{
-					bReturn = CommandList[ucCount].CliExecuteCommand(&Parameters[PARAMETER_START_OFFSET], ucParametersInCommmand, pcResult);
+					bReturn = m_pCliCommandList[ucCount].CliExecuteCommand(&ppcParameters[PARAMETER_START_OFFSET], ucParametersInCommmand, pcResult);
 				}
 				else
 				{
@@ -110,7 +111,7 @@ uint8_t CliProcessCommand(char *pcData, uint8_t ucBytesReceived, char *pcResult)
 			}//end if
 		}//end for
 
-		if (ucCount == sizeof (CommandList) / sizeof (CommandList[0]))
+		if (ucCount == sizeof (m_pCliCommandList) / sizeof (m_pCliCommandList[0]))
 		{
 			strcpy(pcResult, "\nCommand not found\r\n");
 			bReturn = true;
@@ -143,12 +144,12 @@ void CliResetBuffer(char *pcResult)
  *  @param[in] Parameters Pointer to parameters array of string
  *  @return    uint8_t    Number of parameters in command string
  */
-static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, char *Parameter[])
+static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, char *ppcParameters[])
 {
 	uint8_t ucParameterCount = 0;
 	uint8_t ucSpace          = false;
 
-	Parameter[ucParameterCount++] = pcData;
+	ppcParameters[ucParameterCount++] = pcData;
 
 	for (uint8_t ucCount = 0; ucCount < ucLength; ucCount++)
 	{
@@ -157,16 +158,16 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
 			if (true != ucSpace)
 			{
 				*(pcData + ucCount) = '\0';
-				Parameter[ucParameterCount] = &pcData[ucCount + 1];
+				ppcParameters[ucParameterCount] = &pcData[ucCount + 1];
 				ucParameterCount++;
 				ucSpace = true;
-			}
-		}
+			}//end if
+		}//end if
 		else
 		{
 			ucSpace = false;
-		}
-	}
+		}//end else
+	}//end for
 
 	if (true == ucSpace)
 	{
@@ -177,9 +178,9 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
 }//end GetParameters
 
 /** @brief Handles Received characters from Cli
- *  @param[in] pcData  Pointer to Received characters
- *  @param[in] argc    Number of character received
- *  @return    uint8_t true - Command received, false - command not received yet
+ *  @param[in] pcData           Pointer to Received characters
+ *  @param[in] ucParameterCount Number of character received
+ *  @return    uint8_t          true - Command received, false - command not received yet
  *
  */
 static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
@@ -219,21 +220,21 @@ static uint8_t RxHandler(char *pcData, uint8_t ucBytesReceived)
 }//RxHandler
 
 /** @brief Display available commands
- *  @param[in] argv      Pointer to parameters string
- *  @param[in] argc      Number of Parameters
- *  @param[out] pcResult Pointer to result buffer
- *  @return     uint8_t  true-Command executed successfully,
- *                       false-Command not executed
+ *  @param[in]  ppcParameters      Pointer to parameters string
+ *  @param[in]  ucParameterCount   Number of Parameters
+ *  @param[out] pcResult           Pointer to result buffer
+ *  @return     uint8_t            true-Command executed successfully,
+ *                                 false-Command not executed
  */
-static uint8_t Help(char **argv, uint8_t argc, char *pcResult)
+static uint8_t Help(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
 	uint16_t usLength = 0;
 
 	usLength += sprintf(pcResult + usLength, "\r\n");
 
-	for (uint8_t ucCount = 0; ucCount < sizeof (CommandList) / sizeof (CommandList[0]); ucCount++)
+	for (uint8_t ucCount = 0; ucCount < sizeof (m_pCliCommandList) / sizeof (m_pCliCommandList[0]); ucCount++)
 	{
-		usLength += sprintf(pcResult + usLength, "\t%-15s"" - %s\r\n", CommandList[ucCount].pcName, CommandList[ucCount].pcDescription);
+		usLength += sprintf(pcResult + usLength, "\t%-15s"" - %s\r\n", m_pCliCommandList[ucCount].pcName, m_pCliCommandList[ucCount].pcDescription);
 	}
 
 	return true;

@@ -1,4 +1,5 @@
-/** \addtogroup Application
+/** @addtogroup Application
+ *  @brief Application for cli testing
  *  @{
  */
 /*****************************************************************************/
@@ -40,13 +41,13 @@
  *                    G L O B A L  F U N C T I O N S
  ******************************************************************************/
 /** @brief Display Project Information
- *  @param[in] argv      Pointer to parameters string
- *  @param[in] argc      Number of Parameters
- *  @param[out] pcResult Pointer to result buffer
- *  @return     uint8_t  true-Command executed successfully,
- *                       false-Command not executed
+ *  @param[in] ppcParameters    Pointer to parameters string
+ *  @param[in] ucParameterCount Number of Parameters
+ *  @param[out] pcResult        Pointer to result buffer
+ *  @return     uint8_t         true-Command executed successfully,
+ *                              false-Command not executed
  */
-uint8_t AppShowInfo(char **argv, uint8_t argc, char *pcResult)
+uint8_t AppShowInfo(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
 	uint16_t usLength = 0;
 
@@ -61,34 +62,34 @@ uint8_t AppShowInfo(char **argv, uint8_t argc, char *pcResult)
 }//end AppShowInfo
 
 /** @brief Exit from application
- *  @param[in] argv    Pointer to parameters string
- *  @param[in] argc    Number of Parameters
- *  @param[out] pcResult Pointer to result buffer
- *  @return     uint8_t  true-Command executed successfully,
- *                       false-Command not executed
+ *  @param[in] ppcParameters    Pointer to parameters string
+ *  @param[in] ucParameterCount Number of Parameters
+ *  @param[out] pcResult        Pointer to result buffer
+ *  @return     uint8_t         true-Command executed successfully,
+ *                              false-Command not executed
  */
-uint8_t AppExit(char **argv, uint8_t argc, char *pcResult)
+uint8_t AppExit(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
 	exit(0);
 	return true;
 }//end AppExit
 
 /** @brief Sum of two numbers
- *  @param[in] argv    Pointer to parameters string
- *  @param[in] argc    Number of Parameters
- *  @param[out] pcResult Pointer to result buffer
- *  @return     uint8_t  true-Command executed successfully,
- *                       false-Command not executed
+ *  @param[in] ppcParameters    Pointer to parameters string
+ *  @param[in] ucParameterCount Number of Parameters
+ *  @param[out] pcResult        Pointer to result buffer
+ *  @return     uint8_t         true-Command executed successfully,
+ *                              false-Command not executed
  */
-uint8_t AppSum(char **argv, uint8_t argc, char *pcResult)
+uint8_t AppSum(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
 	uint16_t usLength = 0;
 	int32_t iNum1     = 0;
 	int32_t iNum2     = 0;
 	int32_t iSum      = 0;
 
-	iNum1 = atoi((const char *)argv[0]);
-	iNum2 = atoi((const char *)argv[1]);
+	iNum1 = atoi((const char *)ppcParameters[0]);
+	iNum2 = atoi((const char *)ppcParameters[1]);
 
 	iSum = (iNum1 + iNum2);
 

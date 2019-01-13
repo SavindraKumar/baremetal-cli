@@ -1,4 +1,4 @@
-/** \addtogroup Cli
+/** @addtogroup Cli
  *  @{
  */
 /*****************************************************************************/
@@ -21,7 +21,7 @@
 ******************************************************************************/
 #define CLI_DEF_TEXT    "\r\nCli-> "
 
-typedef uint8_t (*CliExecCommand)(char **argv, uint8_t argc, char *pcResult);
+typedef uint8_t (*CliExecCommand)(char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
 
 typedef struct
 {
@@ -29,7 +29,7 @@ typedef struct
     CliExecCommand CliExecuteCommand;
     char * pcDescription;
     uint8_t ucExpectedNumOfParameters;
-}CommandList_t;
+}CliCommandList_t;
 
 
 /******************************************************************************

@@ -1,4 +1,5 @@
-/** \addtogroup Main
+/** @addtogroup Main
+ *  @brief Intialise Cli Interface from main application
  *  @{
  */
 /*****************************************************************************/

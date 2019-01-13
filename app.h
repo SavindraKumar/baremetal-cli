@@ -1,4 +1,4 @@
-/** \addtogroup Application
+/** @addtogroup Application
  *  @{
  */
 /*****************************************************************************/
@@ -28,9 +28,9 @@
 /******************************************************************************
  *                           Global Functions
 ******************************************************************************/
-uint8_t AppShowInfo(char **argv, uint8_t argc, char *pcResult);
-uint8_t AppExit(char **argv, uint8_t argc, char *pcResult);
-uint8_t AppSum( char **argv, uint8_t argc, char *pcResult);
+uint8_t AppShowInfo (char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
+uint8_t AppExit (char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
+uint8_t AppSum (char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
 
 
 #endif /* _APP_H */
