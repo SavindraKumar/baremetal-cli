@@ -59,15 +59,15 @@ int main (void)
 
     for (;;)
     {
-        bool bIsCmdProcess      = false;
-        uint8_t ucBytesReceived = 0;
+        bool    bIsCmdProcess = false;
+        uint8_t ucBytesRec    = 0;
 
-        pcRxBuffer[0] = getchar();
-        ucBytesReceived = 1;
+        pcRxBuffer[0]   = getchar();
+        ucBytesRec      = 1;
 
-        if (0 != ucBytesReceived)
+        if (0 != ucBytesRec)
         {
-            bIsCmdProcess = CliProcessCmd(pcRxBuffer, ucBytesReceived, pcResult);
+            bIsCmdProcess = CliProcessCmd(pcRxBuffer, ucBytesRec, pcResult);
 
             if (true == bIsCmdProcess)
             {
