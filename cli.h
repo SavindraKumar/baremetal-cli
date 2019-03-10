@@ -1,51 +1,47 @@
-/** @addtogroup Cli
- *  @{
- */
-/*****************************************************************************/
-/** @file cli.h
- *  @brief This contains the prototypes, macros, constants or global variables
- *  for the Cli
- *  @author Savindra Kumar(savindran1989@gmail.com)
- *  @bug No known bugs.
- */
-/*****************************************************************************/
+//! @addtogroup Cli
+//! @{
+//
+//****************************************************************************
+//! @file cli.h
+//! @brief This contains the prototypes, macros, constants or global variables
+//        for the Cli
+//! @author Savindra Kumar(savindran1989@gmail.com)
+//! @bug No known bugs.
+//
+//****************************************************************************
 #ifndef _CLI_H
 #define _CLI_H
 
-/******************************************************************************
- *                           Includes
-******************************************************************************/
+//****************************************************************************
+//                           Includes
+//****************************************************************************
 
-/******************************************************************************
- *                           Constants and typedefs
-******************************************************************************/
-#define CLI_DEF_TEXT    "\r\nCli-> "
-
-typedef uint8_t (*CliExecCommand)(char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
+//****************************************************************************
+//                           Constants and typedefs
+//****************************************************************************
+typedef uint8_t (*CliExecCmd) (char **ppcParams, uint8_t ucParamCount, char *pcResult);
 
 typedef struct
 {
-    char * pcName;
-    CliExecCommand CliExecuteCommand;
-    char * pcDescription;
-    uint8_t ucExpectedNumOfParameters;
-}CliCommandList_t;
+    char       *pcName;                   //!<Command name
+    CliExecCmd CliExecuteCmd;             //!<Command execute function
+    char       *pcDescription;            //!<Command description
+    uint8_t    ucExpectedNumOfParams; //!<Number of parameters in command
+} CliCmdList_t;
 
-
-/******************************************************************************
- *                           Global variables
-******************************************************************************/
+//****************************************************************************
+//                           Global variables
+//****************************************************************************
 void CliInit (char *pcResult);
-uint8_t CliProcessCommand (char *pcData, uint8_t ucBytesReceived, char *pcResult);
+uint8_t CliProcessCmd (char *pcData, uint8_t ucBytesRec, char *pcResult);
 void CliResetBuffer (char *pcResult);
 
-/******************************************************************************
- *                           Global Functions
-******************************************************************************/
+//****************************************************************************
+//                           Global Functions
+//****************************************************************************
 
-
-#endif /* _CONSOLE_H */
-/******************************************************************************
- *                             End of file
-******************************************************************************/
-/** @}*/
+#endif // _CONSOLE_H
+//****************************************************************************
+//                             End of file
+//****************************************************************************
+//! @}
