@@ -1,12 +1,12 @@
-// @addtogroup Application
-// @brief Application for cli testing
-// @{
+//! @addtogroup Application
+//! @brief Application for cli testing
+//! @{
 //
 //****************************************************************************
-// @file app.c
-// @brief Implement application functions
-// @author Savindra Kumar(savindran1989@gmail.com)
-// @bug No known bugs.
+//! @file app.c
+//! @brief Implement application functions
+//! @author Savindra Kumar(savindran1989@gmail.com)
+//! @bug No known bugs.
 //
 //****************************************************************************
 //****************************************************************************
@@ -42,12 +42,12 @@
 //                    G L O B A L  F U N C T I O N S
 //****************************************************************************
 //
-// @brief Display Project Information
-// @param[in]  ppcParameters    Pointer to parameters string
-// @param[in]  ucParameterCount Number of Parameters
-// @param[out] pcResult         Pointer to result buffer
-// @return     uint8_t          true -Command executed successfully
-//                              false-Command not executed
+//! @brief Display Project Information
+//! @param[in]  ppcParameters    Pointer to parameters string
+//! @param[in]  ucParameterCount Number of Parameters
+//! @param[out] pcResult         Pointer to result buffer
+//! @return     uint8_t          true -Command executed successfully
+//!                              false-Command not executed
 //
 uint8_t AppShowInfo(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
@@ -64,12 +64,12 @@ uint8_t AppShowInfo(char **ppcParameters, uint8_t ucParameterCount, char *pcResu
 }//end AppShowInfo
 
 //
-// @brief Exit from application
-// @param[in]  ppcParameters    Pointer to parameters string
-// @param[in]  ucParameterCount Number of Parameters
-// @param[out] pcResult         Pointer to result buffer
-// @return     uint8_t          true -Command executed successfully,
-//                              false-Command not executed
+//! @brief Exit from application
+//! @param[in]  ppcParameters    Pointer to parameters string
+//! @param[in]  ucParameterCount Number of Parameters
+//! @param[out] pcResult         Pointer to result buffer
+//! @return     uint8_t          true -Command executed successfully,
+//!                              false-Command not executed
 //
 uint8_t AppExit(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
@@ -78,12 +78,12 @@ uint8_t AppExit(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 }//end AppExit
 
 //
-// @brief Sum of two numbers
-// @param[in]  ppcParameters    Pointer to parameters string
-// @param[in]  ucParameterCount Number of Parameters
-// @param[out] pcResult         Pointer to result buffer
-// @return     uint8_t          true -Command executed successfully,
-//                              false-Command not executed
+//! @brief Sum of two numbers
+//! @param[in]  ppcParameters    Pointer to parameters string
+//! @param[in]  ucParameterCount Number of Parameters
+//! @param[out] pcResult         Pointer to result buffer
+//! @return     uint8_t          true -Command executed successfully,
+//!                              false-Command not executed
 //
 uint8_t AppSum(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 {
@@ -111,4 +111,4 @@ uint8_t AppSum(char **ppcParameters, uint8_t ucParameterCount, char *pcResult)
 //****************************************************************************
 //                             End of file
 //****************************************************************************
-// @}
+//! @}

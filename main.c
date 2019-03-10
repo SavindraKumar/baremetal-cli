@@ -1,12 +1,12 @@
-// @addtogroup Main
-//  @brief Intialise Cli Interface from main application
-//  @{
+//! @addtogroup Main
+//! @brief Initialize Cli Interface from main application
+//! @{
 //
 //****************************************************************************
-// @file main.c
-//  @brief Start of application
-//  @author Savindra Kumar(savindran1989@gmail.com)
-//  @bug No known bugs.
+//! @file main.c
+//! @brief Start of application
+//! @author Savindra Kumar(savindran1989@gmail.com)
+//! @bug No known bugs.
 //
 //****************************************************************************
 //****************************************************************************
@@ -43,9 +43,9 @@
 //                    G L O B A L  F U N C T I O N S
 //****************************************************************************
 //
-// @brief main function
-// @param[in]  None
-// @return     int
+//! @brief main function
+//! @param[in]  None
+//! @return     int
 //
 int main (void)
 {
@@ -88,4 +88,4 @@ int main (void)
 //****************************************************************************
 //                             End of file
 //****************************************************************************
-// @}
+//! @}

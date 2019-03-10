@@ -1,12 +1,12 @@
-// @addtogroup Application
-//  @{
+//! @addtogroup Application
+//! @{
 //
 //****************************************************************************
-// @file app.h
-// @brief This contains the prototypes, macros, constants or global variables
-//        for application
-// @author Savindra Kumar(savindran1989@gmail.com)
-// @bug No known bugs.
+//! @file app.h
+//! @brief This contains the prototypes, macros, constants or global variables
+//!        for application
+//! @author Savindra Kumar(savindran1989@gmail.com)
+//! @bug No known bugs.
 //
 //****************************************************************************
 #ifndef _APP_H
@@ -37,4 +37,4 @@ uint8_t AppSum (char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
 //****************************************************************************
 //                             End of file
 //****************************************************************************
-// @}
+//! @}

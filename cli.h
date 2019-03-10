@@ -1,12 +1,12 @@
-// @addtogroup Cli
-// @{
+//! @addtogroup Cli
+//! @{
 //
 //****************************************************************************
-// @file cli.h
-// @brief This contains the prototypes, macros, constants or global variables
+//! @file cli.h
+//! @brief This contains the prototypes, macros, constants or global variables
 //        for the Cli
-// @author Savindra Kumar(savindran1989@gmail.com)
-// @bug No known bugs.
+//! @author Savindra Kumar(savindran1989@gmail.com)
+//! @bug No known bugs.
 //
 //****************************************************************************
 #ifndef _CLI_H
@@ -23,10 +23,10 @@ typedef uint8_t (*CliExecCmd) (char **ppcParameters, uint8_t ucParameterCount, c
 
 typedef struct
 {
-    char * pcName;
-    CliExecCmd CliExecuteCmd;
-    char * pcDescription;
-    uint8_t ucExpectedNumOfParameters;
+    char * pcName;                        //!<Command name
+    CliExecCmd CliExecuteCmd;             //!<Command execute function
+    char * pcDescription;                 //!<Command description
+    uint8_t ucExpectedNumOfParameters;    //!<Number of parameters in command
 } CliCmdList_t;
 
 //****************************************************************************
@@ -44,4 +44,4 @@ void CliResetBuffer (char *pcResult);
 //****************************************************************************
 //                             End of file
 //****************************************************************************
-// @}
+//! @}
