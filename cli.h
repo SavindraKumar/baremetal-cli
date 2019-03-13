@@ -26,21 +26,21 @@ typedef struct
     char       *pcName;                   //!<Command name
     CliExecCmd CliExecuteCmd;             //!<Command execute function
     char       *pcDescription;            //!<Command description
-    uint8_t    ucExpectedNumOfParams; //!<Number of parameters in command
-} CliCmdList_t;
+    uint8_t    ucExpectedNumOfParams;     //!<Number of parameters in command
+}CliCmdList_t;
 
 //****************************************************************************
 //                           Global variables
 //****************************************************************************
-void CliInit (char *pcResult);
-uint8_t CliProcessCmd (char *pcData, uint8_t ucBytesRec, char *pcResult);
-void CliResetBuffer (char *pcResult);
+void cli_Init (char *pcResult);
+uint8_t cli_ProcessCmd (char *pcData, uint8_t ucBytesRec, char *pcResult);
+void cli_ResetBuffer (char *pcResult);
 
 //****************************************************************************
 //                           Global Functions
 //****************************************************************************
 
-#endif // _CONSOLE_H
+#endif // _CLI_H
 //****************************************************************************
 //                             End of file
 //****************************************************************************

@@ -65,7 +65,7 @@ static uint8_t m_ucIndex = 0;
 //! @param[out] pcResult   Pointer to result buffer
 //! @return     None
 //
-void CliInit(char *pcResult)
+void cli_Init(char *pcResult)
 {
     sprintf(pcResult, CLI_DEF_TEXT);
 } //end CliInit
@@ -78,7 +78,7 @@ void CliInit(char *pcResult)
 //! @return     uint8_t         true -Command executed successfully,
 //!                             false-Command not executed
 //
-uint8_t CliProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
+uint8_t cli_ProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
 {
     char     *ppcParams[MAX_NUM_OF_PARAMS]  = {0};
     uint8_t  ucParamCount                   = 0;
@@ -133,7 +133,7 @@ uint8_t CliProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
 //! @param[out] pcResult Pointer to command text
 //! @return     None
 //
-void CliResetBuffer (char *pcResult)
+void cli_ResetBuffer (char *pcResult)
 {
     m_ucIndex = 0;
     memset(m_pcCmd, 0, sizeof(m_pcCmd));

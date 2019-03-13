@@ -54,7 +54,7 @@ int main (void)
 
     system("/bin/stty raw");
 
-    CliInit(pcResult);
+    cli_Init(pcResult);
     printf(pcResult);
 
     for (;;)
@@ -67,12 +67,12 @@ int main (void)
 
         if (0 != ucBytesRec)
         {
-            bIsCmdProcess = CliProcessCmd(pcRxBuffer, ucBytesRec, pcResult);
+            bIsCmdProcess = cli_ProcessCmd(pcRxBuffer, ucBytesRec, pcResult);
 
             if (true == bIsCmdProcess)
             {
                 printf(pcResult);
-                CliResetBuffer(pcResult);
+                cli_ResetBuffer(pcResult);
                 printf(pcResult);
             } //end if
         } //end if
