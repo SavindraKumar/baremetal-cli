@@ -48,9 +48,9 @@ static uint8_t Help (char **ppcParameters, uint8_t ucParameterCount, char *pcRes
 static const CliCmdList_t m_pCliCmdList[] =
 {
     { "help", Help, "Displays list of supported commands", 0 },
-    { "info", AppShowInfo, "Shows device info", 0 },
-    { "exit", AppExit, "Exit from program", 0 },
-    { "sum", AppSum, "Sum of two numbers", 2 }
+    { "info", app_ShowInfo, "Shows device info", 0 },
+    { "exit", app_Exit, "Exit from program", 0 },
+    { "sum", app_Sum, "Sum of two numbers", 2 }
 };
 
 static char m_pcCmd[CMD_SIZE_IN_BYTES];
@@ -60,7 +60,7 @@ static uint8_t m_ucIndex = 0;
 //                    G L O B A L  F U N C T I O N S
 //****************************************************************************
 //
-//! @brief Initialise Cli
+//! @brief Initialize Cli
 //! @param[in]  None
 //! @param[out] pcResult   Pointer to result buffer
 //! @return     None
@@ -68,7 +68,7 @@ static uint8_t m_ucIndex = 0;
 void cli_Init(char *pcResult)
 {
     sprintf(pcResult, CLI_DEF_TEXT);
-} //end CliInit
+}//end CliInit
 
 //
 //! @brief Process characters received from Cli
@@ -114,7 +114,7 @@ uint8_t cli_ProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
                     bIsCmdProcess = true;
                 }
                 break;
-            } //end if
+            }//end if
         }//end for
 
         if (ucCount == usNumOfCmds)
@@ -125,7 +125,7 @@ uint8_t cli_ProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
     }//end if
 
     return bIsCmdProcess;
-} //end CliProcessCommand
+}//end CliProcessCommand
 
 //
 //! @brief Clear Cli buffer
@@ -138,7 +138,7 @@ void cli_ResetBuffer (char *pcResult)
     m_ucIndex = 0;
     memset(m_pcCmd, 0, sizeof(m_pcCmd));
     sprintf(pcResult, CLI_DEF_TEXT);
-} //end CliResetBuffer
+}//end CliResetBuffer
 
 //****************************************************************************
 //                           L O C A L  F U N C T I O N S
@@ -168,13 +168,13 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
                 ppcTokens[ucParamCount] = &pcData[ucCount + 1];
                 ucParamCount++;
                 bIsSpaceInCmd = true;
-            } //end if
-        } //end if
+            }//end if
+        }//end if
         else
         {
             bIsSpaceInCmd = false;
-        } //end else
-    } //end for
+        }//end else
+    }//end for
 
     if (true == bIsSpaceInCmd)
     {

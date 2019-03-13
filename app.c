@@ -49,7 +49,7 @@
 //! @return     uint8_t      true -Command executed successfully
 //!                          false-Command not executed
 //
-uint8_t AppShowInfo(char **ppcParams, uint8_t ucParamCount, char *pcResult)
+uint8_t app_ShowInfo(char **ppcParams, uint8_t ucParamCount, char *pcResult)
 {
     uint16_t usLengthInBytes = 0;
 
@@ -71,7 +71,7 @@ uint8_t AppShowInfo(char **ppcParams, uint8_t ucParamCount, char *pcResult)
 //! @return     uint8_t      true -Command executed successfully,
 //!                          false-Command not executed
 //
-uint8_t AppExit(char **ppcParams, uint8_t ucParamCount, char *pcResult)
+uint8_t app_Exit(char **ppcParams, uint8_t ucParamCount, char *pcResult)
 {
     exit(0);
     return true;
@@ -85,7 +85,7 @@ uint8_t AppExit(char **ppcParams, uint8_t ucParamCount, char *pcResult)
 //! @return     uint8_t      true -Command executed successfully,
 //!                          false-Command not executed
 //
-uint8_t AppSum(char **ppcParams, uint8_t ucParamCount, char *pcResult)
+uint8_t app_Sum(char **ppcParams, uint8_t ucParamCount, char *pcResult)
 {
     uint16_t usLengthInBytes = 0;
     int32_t  iNum1           = 0;
@@ -102,7 +102,7 @@ uint8_t AppSum(char **ppcParams, uint8_t ucParamCount, char *pcResult)
     usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\r\n");
 
     return true;
-} //end AppSum
+}//end AppSum
 
 //****************************************************************************
 //                           L O C A L  F U N C T I O N S

@@ -74,12 +74,12 @@ int main (void)
                 printf(pcResult);
                 cli_ResetBuffer(pcResult);
                 printf(pcResult);
-            } //end if
-        } //end if
-    } //end for
+            }//end if
+        }//end if
+    }//end for
 
     return 0;
-} //end main
+}//end main
 
 //****************************************************************************
 //                           L O C A L  F U N C T I O N S
