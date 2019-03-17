@@ -19,21 +19,23 @@
 //****************************************************************************
 //                           Constants and typedefs
 //****************************************************************************
-typedef uint8_t (*CliExecCmd) (char **ppcParams, uint8_t ucParamCount, char *pcResult);
+#define CLI_DEF_TEXT               "\r\nCli-> "
+
+typedef uint8_t (*CliExecCmd) (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
 
 typedef struct
 {
-    char       *pcName;                   //!<Command name
-    CliExecCmd CliExecuteCmd;             //!<Command execute function
-    char       *pcDescription;            //!<Command description
-    uint8_t    ucExpectedNumOfParams;     //!<Number of parameters in command
+    const char  *pcName;                   //!<Command name
+    CliExecCmd  CliExecuteCmd;             //!<Command execute function
+    const char  *pcDescription;            //!<Command description
+    uint8_t     ucExpectedNumOfParams;     //!<Number of parameters in command
 }CliCmdList_t;
 
 //****************************************************************************
 //                           Global variables
 //****************************************************************************
 void cli_Init (char *pcResult);
-uint8_t cli_ProcessCmd (char *pcData, uint8_t ucBytesRec, char *pcResult);
+uint8_t cli_ProcessCmd (const char *pcData, uint8_t ucBytesRec, char *pcResult);
 void cli_ResetBuffer (char *pcResult);
 
 //****************************************************************************

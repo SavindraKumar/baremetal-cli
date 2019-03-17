@@ -24,7 +24,6 @@
 //****************************************************************************
 //                           Defines and typedefs
 //****************************************************************************
-#define CLI_DEF_TEXT               "\r\nCli-> "
 #define DELIMITER                  ' '
 #define CMD_SIZE_IN_BYTES          100
 #define CMD_OFFSET                   0
@@ -34,9 +33,9 @@
 //****************************************************************************
 //                           Private Functions
 //****************************************************************************
-static uint8_t RxHandler (char *pcData, uint8_t ucBytesReceived);
+static uint8_t RxHandler (const char *pcData, uint8_t ucBytesReceived);
 static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *ppcTokens[]);
-static uint8_t Help (char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
+static uint8_t Help (const char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
 
 //****************************************************************************
 //                           external variables
@@ -78,7 +77,7 @@ void cli_Init(char *pcResult)
 //! @return     uint8_t         true -Command executed successfully,
 //!                             false-Command not executed
 //
-uint8_t cli_ProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
+uint8_t cli_ProcessCmd(const char *pcData, uint8_t ucBytesRec, char *pcResult)
 {
     char     *ppcParams[MAX_NUM_OF_PARAMS]  = {0};
     uint8_t  ucParamCount                   = 0;
@@ -88,7 +87,10 @@ uint8_t cli_ProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
     bool     bIsCmdProcess                  = false;
 
 
-    bIsCmdRec = RxHandler(pcData, ucBytesRec);
+    if (NULL != pcData)
+    {
+        bIsCmdRec = RxHandler(pcData, ucBytesRec);
+    }
 
     if ( (true == bIsCmdRec) && (strlen(m_pcCmd) > 0) )
     {
@@ -99,14 +101,14 @@ uint8_t cli_ProcessCmd(char *pcData, uint8_t ucBytesRec, char *pcResult)
         {
             if (!strcmp(ppcParams[CMD_OFFSET], m_pCliCmdList[ucCount].pcName))
             {
-                uint8_t ucParamsInCmd = 0;
+                uint8_t    ucParamsInCmd   = 0;
+                const char **ppcCmdParams  = (const char**)&ppcParams[PARAM_OFFSET];
 
                 ucParamsInCmd = ucParamCount - 1;
 
                 if (ucParamsInCmd == m_pCliCmdList[ucCount].ucExpectedNumOfParams)
                 {
-                    bIsCmdProcess = m_pCliCmdList[ucCount].CliExecuteCmd(&ppcParams[PARAM_OFFSET],
-                                                                         ucParamsInCmd, pcResult);
+                    bIsCmdProcess = m_pCliCmdList[ucCount].CliExecuteCmd(ppcCmdParams, ucParamsInCmd, pcResult);
                 }
                 else
                 {
@@ -191,18 +193,12 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
 //! @return    uint8_t          true  - Command received
 //!                             false - command not received yet
 //
-static uint8_t RxHandler(char *pcData, uint8_t ucBytesRec)
+static uint8_t RxHandler(const char *pcData, uint8_t ucBytesRec)
 {
     bool bIsCmdRec = false;
 
     for (uint8_t ucCount = 0; ucCount < ucBytesRec; ucCount++)
     {
-        //Convert string to lowercase
-        if ((pcData[ucCount] >= 65) && (pcData[ucCount] <= 90))
-        {
-            pcData[ucCount] += 32;
-        }
-
         m_pcCmd[m_ucIndex] = pcData[ucCount];
 
         if ('\r' == m_pcCmd[m_ucIndex])
@@ -235,7 +231,7 @@ static uint8_t RxHandler(char *pcData, uint8_t ucBytesRec)
 //! @return     uint8_t        true -Command executed successfully,
 //!                            false-Command not executed
 //
-static uint8_t Help(char **ppcParams, uint8_t ucParamCount, char *pcResult)
+static uint8_t Help(const char **ppcParams, uint8_t ucParamCount, char *pcResult)
 {
     uint16_t usLengthInBytes = 0;
     uint16_t usNumOfCmds     = 0;
