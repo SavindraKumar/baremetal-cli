@@ -19,12 +19,13 @@
 #include <string.h>
 #include <stdbool.h>
 //user defined header files
-#include "projectinfo.h"
 #include "app.h"
 
 //****************************************************************************
 //                           Defines and typedefs
 //****************************************************************************
+#define PROJECT_TITLE     "Cli for Baremetal Embedded System"
+#define FIRMWARE_VERSION  "0.0.1"
 
 //****************************************************************************
 //                           external variables
