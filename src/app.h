@@ -28,9 +28,9 @@
 //****************************************************************************
 //                           Global Functions
 //****************************************************************************
-uint8_t app_ShowInfo (char **ppcParams, uint8_t ucParamCount, char *pcResult);
-uint8_t app_Exit (char **ppcParams, uint8_t ucParamCount, char *pcResult);
-uint8_t app_Sum (char **ppcParams, uint8_t ucParamCount, char *pcResult);
+uint8_t app_ShowInfo (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
+uint8_t app_Exit (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
+uint8_t app_Sum (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
 
 
 #endif // _APP_H
