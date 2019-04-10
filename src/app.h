@@ -28,8 +28,38 @@
 //****************************************************************************
 //                           Global Functions
 //****************************************************************************
-uint8_t app_ShowInfo (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
-uint8_t app_Exit (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
+//
+//! @brief Display Project Information
+//! @param[in]  ppcParams    Pointer to parameters string
+//! @param[in]  ucParamCount Number of Parameters
+//! @param[out] pcResult     Pointer to result buffer
+//! @return     uint8_t      true -Command executed successfully
+//!                          false-Command not executed
+//
+uint8_t app_ShowInfo (const char **ppcParams,
+                      uint8_t ucParamCount,
+                      char *pcResult);
+
+//
+//! @brief Exit from application
+//! @param[in]  ppcParams    Pointer to parameters string
+//! @param[in]  ucParamCount Number of Parameters
+//! @param[out] pcResult     Pointer to result buffer
+//! @return     uint8_t      true -Command executed successfully,
+//!                          false-Command not executed
+//
+uint8_t app_Exit (const char **ppcParams,
+                  uint8_t ucParamCount,
+                  char *pcResult);
+
+//
+//! @brief Sum of two numbers
+//! @param[in]  ppcParams    Pointer to parameters string
+//! @param[in]  ucParamCount Number of Parameters
+//! @param[out] pcResult     Pointer to result buffer
+//! @return     uint8_t      true -Command executed successfully,
+//!                          false-Command not executed
+//
 uint8_t app_Sum (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
 
 

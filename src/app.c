@@ -42,50 +42,34 @@
 //****************************************************************************
 //                    G L O B A L  F U N C T I O N S
 //****************************************************************************
-//
-//! @brief Display Project Information
-//! @param[in]  ppcParams    Pointer to parameters string
-//! @param[in]  ucParamCount Number of Parameters
-//! @param[out] pcResult     Pointer to result buffer
-//! @return     uint8_t      true -Command executed successfully
-//!                          false-Command not executed
-//
-uint8_t app_ShowInfo(const char **ppcParams, uint8_t ucParamCount, char *pcResult)
+uint8_t app_ShowInfo(const char **ppcParams,
+                     uint8_t ucParamCount,
+                     char *pcResult)
 {
     uint16_t usLengthInBytes = 0;
 
     usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\r\n");
-    usLengthInBytes += sprintf(pcResult + usLengthInBytes, "................................................................\r\n");
-    usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\tPROJECT.. [ %s ]\r\n", PROJECT_TITLE);
-    usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\tVERSION.. [ %s ]\r\n", FIRMWARE_VERSION);
-    usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\tDATE..... [ %s %s]\r\n", __DATE__, __TIME__);
-    usLengthInBytes += sprintf(pcResult + usLengthInBytes, "................................................................\r\n");
+    usLengthInBytes += sprintf(pcResult + usLengthInBytes,
+                               "\tPROJECT.. [ %s ]\r\n",
+                               PROJECT_TITLE);
+    usLengthInBytes += sprintf(pcResult + usLengthInBytes,
+                               "\tVERSION.. [ %s ]\r\n",
+                               FIRMWARE_VERSION);
+    usLengthInBytes += sprintf(pcResult + usLengthInBytes,
+                               "\tDATE..... [ %s %s]\r\n",
+                               __DATE__, __TIME__);
 
     return true;
 }//end AppShowInfo
 
-//
-//! @brief Exit from application
-//! @param[in]  ppcParams    Pointer to parameters string
-//! @param[in]  ucParamCount Number of Parameters
-//! @param[out] pcResult     Pointer to result buffer
-//! @return     uint8_t      true -Command executed successfully,
-//!                          false-Command not executed
-//
-uint8_t app_Exit(const char **ppcParams, uint8_t ucParamCount, char *pcResult)
+uint8_t app_Exit(const char **ppcParams,
+                 uint8_t ucParamCount,
+                 char *pcResult)
 {
     exit(0);
     return true;
 }//end AppExit
 
-//
-//! @brief Sum of two numbers
-//! @param[in]  ppcParams    Pointer to parameters string
-//! @param[in]  ucParamCount Number of Parameters
-//! @param[out] pcResult     Pointer to result buffer
-//! @return     uint8_t      true -Command executed successfully,
-//!                          false-Command not executed
-//
 uint8_t app_Sum(const char **ppcParams, uint8_t ucParamCount, char *pcResult)
 {
     uint16_t usLengthInBytes = 0;

@@ -33,9 +33,39 @@
 //****************************************************************************
 //                           Private Functions
 //****************************************************************************
+//
+//! @brief Handles Received characters from Cli
+//! @param[in] pcData           Pointer to Received characters
+//! @param[in] ucBytesRec       Number of character received
+//! @return    uint8_t          true  - Command received
+//!                             false - command not received yet
+//
 static uint8_t RxHandler (const char *pcData, uint8_t ucBytesReceived);
-static uint8_t GetParameters (char *pcData, uint8_t ucLength, char cDelimiter, char *ppcTokens[]);
-static uint8_t Help (const char **ppcParameters, uint8_t ucParameterCount, char *pcResult);
+
+//
+//! @brief Get Parameters from commands
+//! @param[in] pcData     Pointer to command string
+//! @param[in] ucLength   Size of command string
+//! @param[in] cDelimiter Delimiter used to separate parameters
+//! @param[in] ppcTokens  Pointer to number of tokens in command
+//! @return    uint8_t    Number of parameters in command string
+//
+static uint8_t GetParameters (char *pcData,
+                              uint8_t ucLength,
+                              char cDelimiter,
+                              char *ppcTokens[]);
+
+//
+//! @brief Display available commands
+//! @param[in]  ppcParams      Pointer to parameters string
+//! @param[in]  ucParamCount   Number of Parameters
+//! @param[out] pcResult       Pointer to result buffer
+//! @return     uint8_t        true -Command executed successfully,
+//!                            false-Command not executed
+//
+static uint8_t Help (const char **ppcParameters,
+                     uint8_t ucParameterCount,
+                     char *pcResult);
 
 //****************************************************************************
 //                           external variables
@@ -44,7 +74,7 @@ static uint8_t Help (const char **ppcParameters, uint8_t ucParameterCount, char 
 //****************************************************************************
 //                           Private variables
 //****************************************************************************
-static const CliCmdList_t m_pCliCmdList[] =
+static const CliCmdList_t m_CliCmdListBuf[] =
 {
     { "help", Help, "Displays list of supported commands", 0 },
     { "info", app_ShowInfo, "Shows device info", 0 },
@@ -52,31 +82,17 @@ static const CliCmdList_t m_pCliCmdList[] =
     { "sum", app_Sum, "Sum of two numbers", 2 }
 };
 
-static char m_pcCmd[CMD_SIZE_IN_BYTES];
+static char    m_cCmdBuf[CMD_SIZE_IN_BYTES];
 static uint8_t m_ucIndex = 0;
 
 //****************************************************************************
 //                    G L O B A L  F U N C T I O N S
 //****************************************************************************
-//
-//! @brief Initialize Cli
-//! @param[in]  None
-//! @param[out] pcResult   Pointer to result buffer
-//! @return     None
-//
 void cli_Init(char *pcResult)
 {
     sprintf(pcResult, CLI_DEF_TEXT);
 }//end CliInit
 
-//
-//! @brief Process characters received from Cli
-//! @param[in]  pcData          Pointer to characters received
-//! @param[in]  ucBytesRec      Number of characters received
-//! @param[out] pcResult        Pointer to result buffer
-//! @return     uint8_t         true -Command executed successfully,
-//!                             false-Command not executed
-//
 uint8_t cli_ProcessCmd(const char *pcData, uint8_t ucBytesRec, char *pcResult)
 {
     char     *ppcParams[MAX_NUM_OF_PARAMS]  = {0};
@@ -92,23 +108,23 @@ uint8_t cli_ProcessCmd(const char *pcData, uint8_t ucBytesRec, char *pcResult)
         bIsCmdRec = RxHandler(pcData, ucBytesRec);
     }
 
-    if ( (true == bIsCmdRec) && (strlen(m_pcCmd) > 0) )
+    if ( (true == bIsCmdRec) && (strlen(m_cCmdBuf) > 0) )
     {
-        ucParamCount = GetParameters(m_pcCmd, strlen(m_pcCmd), DELIMITER, ppcParams);
-        usNumOfCmds  = sizeof(m_pCliCmdList) / sizeof(m_pCliCmdList[0]);
+        ucParamCount = GetParameters(m_cCmdBuf, strlen(m_cCmdBuf), DELIMITER, ppcParams);
+        usNumOfCmds  = sizeof(m_CliCmdListBuf) / sizeof(m_CliCmdListBuf[0]);
 
         for (ucCount = 0; ucCount < usNumOfCmds; ucCount++)
         {
-            if (!strcmp(ppcParams[CMD_OFFSET], m_pCliCmdList[ucCount].pcName))
+            if (!strcmp(ppcParams[CMD_OFFSET], m_CliCmdListBuf[ucCount].pcName))
             {
                 uint8_t    ucParamsInCmd   = 0;
                 const char **ppcCmdParams  = (const char**)&ppcParams[PARAM_OFFSET];
 
                 ucParamsInCmd = ucParamCount - 1;
 
-                if (ucParamsInCmd == m_pCliCmdList[ucCount].ucExpectedNumOfParams)
+                if (ucParamsInCmd == m_CliCmdListBuf[ucCount].ucExpectedNumOfParams)
                 {
-                    bIsCmdProcess = m_pCliCmdList[ucCount].CliExecuteCmd(ppcCmdParams, ucParamsInCmd, pcResult);
+                    bIsCmdProcess = m_CliCmdListBuf[ucCount].CliExecuteCmd(ppcCmdParams, ucParamsInCmd, pcResult);
                 }
                 else
                 {
@@ -129,30 +145,16 @@ uint8_t cli_ProcessCmd(const char *pcData, uint8_t ucBytesRec, char *pcResult)
     return bIsCmdProcess;
 }//end CliProcessCommand
 
-//
-//! @brief Clear Cli buffer
-//! @param[in]  None
-//! @param[out] pcResult Pointer to command text
-//! @return     None
-//
 void cli_ResetBuffer (char *pcResult)
 {
     m_ucIndex = 0;
-    memset(m_pcCmd, 0, sizeof(m_pcCmd));
+    memset(m_cCmdBuf, 0, sizeof(m_cCmdBuf));
     sprintf(pcResult, CLI_DEF_TEXT);
 }//end CliResetBuffer
 
 //****************************************************************************
 //                           L O C A L  F U N C T I O N S
 //****************************************************************************
-//
-//! @brief Get Parameters from commands
-//! @param[in] pcData     Pointer to command string
-//! @param[in] ucLength   Size of command string
-//! @param[in] cDelimiter Delimiter used to separate parameters
-//! @param[in] ppcTokens  Pointer to number of tokens in command
-//! @return    uint8_t    Number of parameters in command string
-//
 static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, char *ppcTokens[])
 {
     uint8_t ucParamCount  = 0;
@@ -186,64 +188,49 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
     return ucParamCount;
 }//end GetParameters
 
-//
-//! @brief Handles Received characters from Cli
-//! @param[in] pcData           Pointer to Received characters
-//! @param[in] ucBytesRec       Number of character received
-//! @return    uint8_t          true  - Command received
-//!                             false - command not received yet
-//
 static uint8_t RxHandler(const char *pcData, uint8_t ucBytesRec)
 {
     bool bIsCmdRec = false;
 
     for (uint8_t ucCount = 0; ucCount < ucBytesRec; ucCount++)
     {
-        m_pcCmd[m_ucIndex] = pcData[ucCount];
+        m_cCmdBuf[m_ucIndex] = pcData[ucCount];
 
-        if ('\r' == m_pcCmd[m_ucIndex])
+        if ('\r' == m_cCmdBuf[m_ucIndex])
         {
-            m_pcCmd[m_ucIndex] = '\0';
+            m_cCmdBuf[m_ucIndex] = '\0';
             bIsCmdRec          = true;
         }
-        if ('\b' == m_pcCmd[m_ucIndex])
+        if ('\b' == m_cCmdBuf[m_ucIndex])
         {
             if (m_ucIndex)
             {
                 m_ucIndex--;
             }
         }
-        else if (m_ucIndex < (sizeof(m_pcCmd) - 1))
+        else if (m_ucIndex < (sizeof(m_cCmdBuf) - 1))
         {
             m_ucIndex++;
         }
-        m_pcCmd[m_ucIndex] = '\0';
+        m_cCmdBuf[m_ucIndex] = '\0';
     }
 
     return bIsCmdRec;
 }//RxHandler
 
-//
-//! @brief Display available commands
-//! @param[in]  ppcParams      Pointer to parameters string
-//! @param[in]  ucParamCount   Number of Parameters
-//! @param[out] pcResult       Pointer to result buffer
-//! @return     uint8_t        true -Command executed successfully,
-//!                            false-Command not executed
-//
 static uint8_t Help(const char **ppcParams, uint8_t ucParamCount, char *pcResult)
 {
     uint16_t usLengthInBytes = 0;
     uint16_t usNumOfCmds     = 0;
 
     usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\r\n");
-    usNumOfCmds      = sizeof(m_pCliCmdList) / sizeof(m_pCliCmdList[0]);
+    usNumOfCmds      = sizeof(m_CliCmdListBuf) / sizeof(m_CliCmdListBuf[0]);
 
     for (uint8_t ucCount = 0; ucCount < usNumOfCmds; ucCount++)
     {
         usLengthInBytes += sprintf(pcResult + usLengthInBytes, "\t%-15s" " - %s\r\n",
-                                   m_pCliCmdList[ucCount].pcName,
-                                   m_pCliCmdList[ucCount].pcDescription);
+                                   m_CliCmdListBuf[ucCount].pcName,
+                                   m_CliCmdListBuf[ucCount].pcDescription);
     }
 
     return true;

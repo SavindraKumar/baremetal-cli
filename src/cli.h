@@ -34,8 +34,32 @@ typedef struct
 //****************************************************************************
 //                           Global variables
 //****************************************************************************
+//
+//! @brief Initialize Cli
+//! @param[in]  None
+//! @param[out] pcResult   Pointer to result buffer
+//! @return     None
+//
 void cli_Init (char *pcResult);
-uint8_t cli_ProcessCmd (const char *pcData, uint8_t ucBytesRec, char *pcResult);
+
+//
+//! @brief Process characters received from Cli
+//! @param[in]  pcData          Pointer to characters received
+//! @param[in]  ucBytesRec      Number of characters received
+//! @param[out] pcResult        Pointer to result buffer
+//! @return     uint8_t         true -Command executed successfully,
+//!                             false-Command not executed
+//
+uint8_t cli_ProcessCmd (const char *pcData,
+                        uint8_t ucBytesRec,
+                        char *pcResult);
+
+//
+//! @brief Clear Cli buffer
+//! @param[in]  None
+//! @param[out] pcResult Pointer to command text
+//! @return     None
+//
 void cli_ResetBuffer (char *pcResult);
 
 //****************************************************************************
