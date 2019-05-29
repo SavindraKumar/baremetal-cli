@@ -1,7 +1,6 @@
 stages:
   - static analysis
   - unit tests
-  - code coverage
   
 jobs:
   include:
@@ -26,8 +25,4 @@ jobs:
       - cd ..
       - cd ..
       - cd tests && make -B
-
-    - stage: code coverage
-      script:
       - cd tests && make -B gcov
- 
