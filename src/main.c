@@ -55,7 +55,7 @@ int main (void)
     system("/bin/stty raw");
 
     cli_Init(pcResult);
-    printf(pcResult);
+    printf("%s", pcResult);
 
     for (;;)
     {
@@ -71,9 +71,9 @@ int main (void)
 
             if (true == bIsCmdProcess)
             {
-                printf(pcResult);
+                printf("%s", pcResult);
                 cli_ResetBuffer(pcResult);
-                printf(pcResult);
+                printf("%s", pcResult);
             }//end if
         }//end if
     }//end for
