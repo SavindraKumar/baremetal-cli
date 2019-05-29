@@ -1,0 +1,25 @@
+stages:
+  - static analysis
+  - unit tests
+  
+jobs:
+  include:
+    - stage: static analysis             
+      script:
+      - sudo apt-get update -qq
+      - sudo apt-get install -qq cppcheck
+      - cppcheck --quiet --error-exitcode=1 . 
+
+    - stage: unit tests
+      script:
+      - git clone git://github.com/cpputest/cpputest.git
+      - cd cpputest
+      - cd cpputest_build
+      - autoreconf .. -i
+      - ../configure
+      - make -j
+      - cp -r lib ../lib
+      - cd ..
+      - cd ..
+      - cd tests && make -j
+ 
