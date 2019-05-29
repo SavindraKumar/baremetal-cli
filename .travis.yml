@@ -1,6 +1,7 @@
 stages:
   - static analysis
   - unit tests
+  - code coverage
   
 jobs:
   include:
@@ -14,12 +15,18 @@ jobs:
       script:
       - git clone git://github.com/cpputest/cpputest.git
       - cd cpputest
+      - dos2unix Makefile.am
+      - dos2unix scripts/filterGcov.sh
       - cd cpputest_build
       - autoreconf .. -i
       - ../configure
-      - make -j
+      - make -B
       - cp -r lib ../lib
       - cd ..
       - cd ..
-      - cd tests && make -j
+      - cd tests && make -B
+
+    -stage: code coverage
+     script:
+      - cd tests && make -B gcov
  
