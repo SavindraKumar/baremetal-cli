@@ -21,7 +21,9 @@
 //****************************************************************************
 #define CLI_DEF_TEXT               "\r\nCli-> "
 
-typedef uint8_t (*CliExecCmd) (const char **ppcParams, uint8_t ucParamCount, char *pcResult);
+typedef uint8_t (*CliExecCmd) (const char **ppcParams,
+                               uint8_t ucParamCount,
+                               char *pcResult);
 
 typedef struct
 {
