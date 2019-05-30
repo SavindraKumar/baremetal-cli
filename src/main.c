@@ -49,31 +49,31 @@
 //
 int main (void)
 {
-    char pcRxBuffer[REC_INPUT_SIZE_IN_BYTES];
-    char pcResult[OUTPUT_SIZE_IN_BYTES];
+    char cRxBuf[REC_INPUT_SIZE_IN_BYTES];
+    char cResultBuf[OUTPUT_SIZE_IN_BYTES];
 
     system("/bin/stty raw");
 
-    cli_Init(pcResult);
-    printf(pcResult);
+    cli_Init(cResultBuf);
+    printf("%s", cResultBuf);
 
     for (;;)
     {
         bool    bIsCmdProcess = false;
         uint8_t ucBytesRec    = 0;
 
-        pcRxBuffer[0]   = getchar();
-        ucBytesRec      = 1;
+        cRxBuf[0]   = getchar();
+        ucBytesRec  = 1;
 
         if (0 != ucBytesRec)
         {
-            bIsCmdProcess = cli_ProcessCmd(pcRxBuffer, ucBytesRec, pcResult);
+            bIsCmdProcess = cli_ProcessCmd(cRxBuf, ucBytesRec, cResultBuf);
 
             if (true == bIsCmdProcess)
             {
-                printf(pcResult);
-                cli_ResetBuffer(pcResult);
-                printf(pcResult);
+                printf("%s", cResultBuf);
+                cli_ResetBuffer(cResultBuf);
+                printf("%s", cResultBuf);
             }//end if
         }//end if
     }//end for

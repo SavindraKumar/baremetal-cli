@@ -1,0 +1,27 @@
+stages:
+  - static analysis
+  - unit tests
+  
+jobs:
+  include:
+    - stage: static analysis             
+      script:
+      - sudo apt-get update -qq
+      - sudo apt-get install -qq cppcheck
+      - cppcheck --quiet --error-exitcode=1 . 
+
+    - stage: unit tests
+      script:
+      - git clone git://github.com/cpputest/cpputest.git
+      - cd cpputest
+      - sudo apt-get install dos2unix
+      - dos2unix Makefile.am
+      - dos2unix scripts/filterGcov.sh
+      - cd cpputest_build
+      - autoreconf .. -i
+      - ../configure
+      - make -B
+      - cp -r lib ../lib
+      - cd ..
+      - cd ..
+      - cd tests && make -B gcov

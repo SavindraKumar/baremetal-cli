@@ -25,10 +25,10 @@
 //                           Defines and typedefs
 //****************************************************************************
 #define DELIMITER                  ' '
-#define CMD_SIZE_IN_BYTES          100
-#define CMD_OFFSET                   0
-#define PARAM_OFFSET                 1
-#define MAX_NUM_OF_PARAMS            8
+#define CMD_SIZE_IN_BYTES          (100u)
+#define CMD_OFFSET                 (0u)
+#define PARAM_OFFSET               (1u)
+#define MAX_NUM_OF_PARAMS          (8u)
 
 //****************************************************************************
 //                           Private Functions
@@ -47,13 +47,13 @@ static uint8_t RxHandler (const char *pcData, uint8_t ucBytesReceived);
 //! @param[in] pcData     Pointer to command string
 //! @param[in] ucLength   Size of command string
 //! @param[in] cDelimiter Delimiter used to separate parameters
-//! @param[in] ppcTokens  Pointer to number of tokens in command
+//! @param[in] pcParamBuf Pointer to number of parameters in command
 //! @return    uint8_t    Number of parameters in command string
 //
 static uint8_t GetParameters (char *pcData,
                               uint8_t ucLength,
                               char cDelimiter,
-                              char *ppcTokens[]);
+                              char *pcParamBuf[]);
 
 //
 //! @brief Display available commands
@@ -95,12 +95,12 @@ void cli_Init(char *pcResult)
 
 uint8_t cli_ProcessCmd(const char *pcData, uint8_t ucBytesRec, char *pcResult)
 {
-    char     *ppcParams[MAX_NUM_OF_PARAMS]  = {0};
-    uint8_t  ucParamCount                   = 0;
-    uint8_t  ucCount                        = 0;
-    uint16_t usNumOfCmds                    = 0;
-    bool     bIsCmdRec                      = false;
-    bool     bIsCmdProcess                  = false;
+    char     *pcParamsBuf[MAX_NUM_OF_PARAMS] = {0};
+    uint8_t  ucParamCount                    = 0;
+    uint8_t  ucCount                         = 0;
+    uint16_t usNumOfCmds                     = 0;
+    bool     bIsCmdRec                       = false;
+    bool     bIsCmdProcess                   = false;
 
 
     if (NULL != pcData)
@@ -110,21 +110,23 @@ uint8_t cli_ProcessCmd(const char *pcData, uint8_t ucBytesRec, char *pcResult)
 
     if ( (true == bIsCmdRec) && (strlen(m_cCmdBuf) > 0) )
     {
-        ucParamCount = GetParameters(m_cCmdBuf, strlen(m_cCmdBuf), DELIMITER, ppcParams);
+        ucParamCount = GetParameters(m_cCmdBuf, strlen(m_cCmdBuf), DELIMITER, pcParamsBuf);
         usNumOfCmds  = sizeof(m_CliCmdListBuf) / sizeof(m_CliCmdListBuf[0]);
 
         for (ucCount = 0; ucCount < usNumOfCmds; ucCount++)
         {
-            if (!strcmp(ppcParams[CMD_OFFSET], m_CliCmdListBuf[ucCount].pcName))
+            if (!strcmp(pcParamsBuf[CMD_OFFSET], m_CliCmdListBuf[ucCount].pcName))
             {
                 uint8_t    ucParamsInCmd   = 0;
-                const char **ppcCmdParams  = (const char**)&ppcParams[PARAM_OFFSET];
+                const char **ppcCmdParams  = (const char**)&pcParamsBuf[PARAM_OFFSET];
 
                 ucParamsInCmd = ucParamCount - 1;
 
                 if (ucParamsInCmd == m_CliCmdListBuf[ucCount].ucExpectedNumOfParams)
                 {
-                    bIsCmdProcess = m_CliCmdListBuf[ucCount].CliExecuteCmd(ppcCmdParams, ucParamsInCmd, pcResult);
+                    bIsCmdProcess = m_CliCmdListBuf[ucCount].CliExecuteCmd(ppcCmdParams,
+                                                                           ucParamsInCmd,
+                                                                           pcResult);
                 }
                 else
                 {
@@ -155,12 +157,15 @@ void cli_ResetBuffer (char *pcResult)
 //****************************************************************************
 //                           L O C A L  F U N C T I O N S
 //****************************************************************************
-static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, char *ppcTokens[])
+static uint8_t GetParameters(char *pcData,
+                             uint8_t ucLength,
+                             char cDelimiter,
+                             char *pcParamBuf[])
 {
     uint8_t ucParamCount  = 0;
     bool    bIsSpaceInCmd = false;
 
-    ppcTokens[ucParamCount++] = pcData;
+    pcParamBuf[ucParamCount++] = pcData;
 
     for (uint8_t ucCount = 0; ucCount < ucLength; ucCount++)
     {
@@ -168,8 +173,8 @@ static uint8_t GetParameters(char *pcData, uint8_t ucLength, char cDelimiter, ch
         {
             if (true != bIsSpaceInCmd)
             {
-                *(pcData + ucCount)     = '\0';
-                ppcTokens[ucParamCount] = &pcData[ucCount + 1];
+                *(pcData + ucCount)      = '\0';
+                pcParamBuf[ucParamCount] = &pcData[ucCount + 1];
                 ucParamCount++;
                 bIsSpaceInCmd = true;
             }//end if
